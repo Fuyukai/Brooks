@@ -77,7 +77,7 @@ while True:
 
         chosen_idx = random.randint(0, len(tweets) - 1)
         chosen_tweet = tweets.pop(chosen_idx)
-        print(f"Tweeting for bot {name}.")
+        print(f"Tweeting for bot {bot.name}.")
         print(f"Chosen tweet: `{chosen_tweet}`")
         print(f"There are {len(tweets)} tweets left.")
         try:
@@ -85,7 +85,7 @@ while True:
         except:
             traceback.print_exc()
         finally:
-            print(f"Saving checkpoint for bot {name}.")
+            print(f"Saving checkpoint for bot {bot.name}.")
             checkpoint_file = bot.path / "checkpoint.json"
             checkpoint = json.dumps(tweets)
             checkpoint_file.write_text(checkpoint)
