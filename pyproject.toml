@@ -1,11 +1,11 @@
 [tool.poetry]
-name = "impalerbot"
-version = "0.1.0"
-description = ""
-authors = ["Laura F Dickinson <l@veriny.tf>"]
+name = "brooks"
+version = "0.2.0"
+description = "Brooks Twitter Bot"
+authors = ["Laura S Dickinson <l@veriny.tf>"]
 
 [tool.poetry.dependencies]
-python = "^3.8"
+python = "^3.7"
 tweepy = "^3.8.0"
 
 [tool.poetry.dev-dependencies]
