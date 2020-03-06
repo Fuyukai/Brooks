@@ -62,7 +62,7 @@ for directory in BOT_DIR.iterdir():
 
     else:
         # load tweet lists
-        with(directory / "tweetlist.txt").open() as f:
+        with (directory / "tweetlist.txt").open() as f:
             tweets = data = f.read().split("====================")
             tweets = [i.lstrip().rstrip() for i in data if 0 < len(i) < 280]
             print(f"Loaded {len(tweets)} tweets for bot {name}")
