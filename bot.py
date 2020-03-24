@@ -22,6 +22,7 @@ import random
 import time
 import traceback
 from dataclasses import dataclass
+from datetime import datetime, timedelta
 from typing import List
 
 import tweepy
@@ -56,11 +57,16 @@ for directory in BOT_DIR.iterdir():
 
     # load checkpoint, if any
     checkpoint = directory / "checkpoint.json"
+    loaded_checkpoint = False
     if checkpoint.exists():
         tweets = json.loads(checkpoint.read_text())
-        print(f"Loaded {len(tweets)} from checkpoint for bot {name}.")
+        if len(tweets) <= 0:
+            print(f"Warning: Checkpoint was empty! Starting fresh from old tweet list...")
+        else:
+            print(f"Loaded {len(tweets)} from checkpoint for bot {name}.")
+            loaded_checkpoint = True
 
-    else:
+    if not loaded_checkpoint:
         # load tweet lists
         with (directory / "tweetlist.txt").open() as f:
             tweets = data = f.read().split("====================")
@@ -70,10 +76,30 @@ for directory in BOT_DIR.iterdir():
     bot = Bot(name=name, path=directory, api=api, tweets=tweets)
     bots.append(bot)
 
+now = datetime.utcnow()
+
+print("Bots are booting, sending system status message...")
+# tweet status message
+for bot in bots:
+    tweet_count = len(bot.tweets)
+    seconds = tweet_count * SLEEP_TIME
+    runs_out = now + timedelta(seconds=seconds)
+    message = f"[System notice: Bot rebooted with {tweet_count} tweets." \
+              f" Bot runs out of tweets at {runs_out.isoformat()}.]"
+
+    bot.api.update_status(status=message)
+
+time.sleep(5)
+
 print()
 while True:
     for bot in bots:
         tweets = bot.tweets
+
+        if len(tweets) <= 0:
+            message = "[System notice: Bot has run out of tweets!]"
+            bot.api.update_status(message)
+            exit(1)
 
         chosen_idx = random.randint(0, len(tweets) - 1)
         chosen_tweet = tweets.pop(chosen_idx)
