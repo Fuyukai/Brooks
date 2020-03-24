@@ -18,7 +18,6 @@ from __future__ import annotations
 
 import json
 import pathlib
-import random
 import time
 import traceback
 from dataclasses import dataclass
@@ -101,8 +100,7 @@ while True:
             bot.api.update_status(message)
             exit(1)
 
-        chosen_idx = random.randint(0, len(tweets) - 1)
-        chosen_tweet = tweets.pop(chosen_idx)
+        chosen_tweet = tweets.pop(0)
         print(f"Tweeting for bot {bot.name}.")
         print(f"Chosen tweet: `{chosen_tweet}`")
         print(f"There are {len(tweets)} tweets left.")
